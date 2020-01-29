@@ -13,6 +13,7 @@ import argparse
 import uuid
 from .tape import Tape
 from . import config
+from . import shared
 
 
 class tapeimgrCLI:
@@ -135,6 +136,12 @@ class tapeimgrCLI:
 
         # Parse command line arguments
         self.parseCommandLine()
+
+        # Check if required command line utils are available
+        for cmd in shared.REQUIRED_CMDS:
+            if not shared.checkCmd(cmd):
+                msg = ("Command '" + cmd + "' not found. Install required packge")
+                errorExit(msg)
 
         # Validate input
         self.tape.validateInput()

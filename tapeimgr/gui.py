@@ -23,6 +23,7 @@ from tkinter import ttk
 from tkfilebrowser import askopendirname
 from .tape import Tape
 from . import config
+from . import shared
 
 
 class tapeimgrGUI(tk.Frame):
@@ -73,6 +74,12 @@ class tapeimgrGUI(tk.Frame):
         self.tape.description = self.description_entry.get().strip()
         self.tape.notes = self.notes_entry.get(1.0, tk.END).strip()
         self.tape.fillBlocks = self.fBlocks.get()
+
+        # Check if required command line utils are available
+        for cmd in shared.REQUIRED_CMDS:
+            if not shared.checkCmd(cmd):
+                msg = ("Command '" + cmd + "' not found. Install required packge")
+                errorExit(msg)
 
         # Validate input
         self.tape.validateInput()

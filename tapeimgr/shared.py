@@ -9,6 +9,8 @@ import datetime
 import subprocess as sub
 import pytz
 
+REQUIRED_CMDS = ['mt', 'dd']
+
 def launchSubProcess(args, writeLog=True):
     """Launch subprocess and return exit code, stdout and stderr"""
     try:
@@ -102,3 +104,13 @@ def generateDateTime(timeZone):
     dateTime = pst.localize(dateTime)
     dateTimeFormatted = dateTime.isoformat()
     return dateTimeFormatted
+
+def checkCmd(cmd):
+    """Check if executable is present in PATH"""
+    return sub.call(
+            "type " + cmd, 
+            shell=True, 
+            stdout=sub.PIPE, 
+            stderr=sub.PIPE
+    ) == 0
+
