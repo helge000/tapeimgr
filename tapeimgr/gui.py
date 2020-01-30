@@ -74,6 +74,7 @@ class tapeimgrGUI(tk.Frame):
         self.tape.description = self.description_entry.get().strip()
         self.tape.notes = self.notes_entry.get(1.0, tk.END).strip()
         self.tape.fillBlocks = self.fBlocks.get()
+        self.tape.endianSwap = self.eSwap.get()
 
         # Check if required command line utils are available
         for cmd in shared.REQUIRED_CMDS:
@@ -143,6 +144,7 @@ class tapeimgrGUI(tk.Frame):
                 self.prefix_entry.config(state='disabled')
                 self.extension_entry.config(state='disabled')
                 self.fillblocks_entry.config(state='disabled')
+                self.endianswap_entry.config(state='disabled')
                 self.identifier_entry.config(state='disabled')
                 self.uuidButton.config(state='disabled')
                 self.description_entry.config(state='disabled')
@@ -262,7 +264,14 @@ class tapeimgrGUI(tk.Frame):
         self.fillblocks_entry = tk.Checkbutton(self, variable=self.fBlocks)
         self.fillblocks_entry.grid(column=1, row=11, sticky='w')
 
-        ttk.Separator(self, orient='horizontal').grid(column=0, row=12, columnspan=4, sticky='ew')
+        # Swap Endian
+        tk.Label(self, text='Swap little/big endian').grid(column=0, row=12, sticky='w')
+        self.eSwap = tk.BooleanVar()
+        self.eSwap.set(self.tape.endianSwap)
+        self.endianswap_entry = tk.Checkbutton(self, variable=self.eSwap)
+        self.endianswap_entry.grid(column=1, row=12, sticky='w')
+
+        ttk.Separator(self, orient='horizontal').grid(column=0, row=12+1, columnspan=4, sticky='ew')
 
         # Identifier entry field
         tk.Label(self, text='Identifier').grid(column=0, row=13, sticky='w')
@@ -272,45 +281,45 @@ class tapeimgrGUI(tk.Frame):
         self.identifier_entry.grid(column=1, row=13, sticky='w')
         self.uuidButton = tk.Button(self, text='UUID', underline=0,
                                     command=self.insertUUID, width=2)
-        self.uuidButton.grid(column=1, row=13, sticky='e')
+        self.uuidButton.grid(column=1, row=13+1, sticky='e')
 
         # Description entry field
         tk.Label(self, text='Description').grid(column=0, row=14, sticky='w')
         self.description_entry = tk.Entry(self, width=35)
         self.description_entry['background'] = 'white'
         self.description_entry.insert(tk.END, self.tape.description)
-        self.description_entry.grid(column=1, row=14, sticky='w', columnspan=1)
+        self.description_entry.grid(column=1, row=14+1, sticky='w', columnspan=1)
 
         # Notes entry field
         tk.Label(self, text='Notes').grid(column=0, row=15, sticky='w')
         self.notes_entry = tk.Text(self, height=6, width=35)
         self.notes_entry['background'] = 'white'
         self.notes_entry.insert(tk.END, self.tape.notes)
-        self.notes_entry.grid(column=1, row=15, sticky='w', columnspan=1)
+        self.notes_entry.grid(column=1, row=15+1, sticky='w', columnspan=1)
 
-        ttk.Separator(self, orient='horizontal').grid(column=0, row=16, columnspan=4, sticky='ew')
+        ttk.Separator(self, orient='horizontal').grid(column=0, row=16+1, columnspan=4, sticky='ew')
 
         self.start_button = tk.Button(self,
                                       text='Start',
                                       width=10,
                                       underline=0,
                                       command=self.on_submit)
-        self.start_button.grid(column=1, row=17, sticky='w')
+        self.start_button.grid(column=1, row=17+1, sticky='w')
 
         self.quit_button = tk.Button(self,
                                      text='Exit',
                                      width=10,
                                      underline=0,
                                      command=self.on_quit)
-        self.quit_button.grid(column=1, row=17, sticky='e')
+        self.quit_button.grid(column=1, row=17+1, sticky='e')
 
-        ttk.Separator(self, orient='horizontal').grid(column=0, row=18, columnspan=4, sticky='ew')
+        ttk.Separator(self, orient='horizontal').grid(column=0, row=18+1, columnspan=4, sticky='ew')
 
         # Add ScrolledText widget to display logging info
         self.st = ScrolledText.ScrolledText(self, state='disabled', height=15)
         self.st.configure(font='TkFixedFont')
         self.st['background'] = 'white'
-        self.st.grid(column=0, row=19, sticky='ew', columnspan=4)
+        self.st.grid(column=0, row=19+1, sticky='ew', columnspan=4)
 
         # Define bindings for keyboard shortcuts: buttons
         self.root.bind_all('<Control-Key-d>', self.selectOutputDirectory)
@@ -350,6 +359,7 @@ class tapeimgrGUI(tk.Frame):
         self.prefix_entry.config(state='normal')
         self.extension_entry.config(state='normal')
         self.fillblocks_entry.config(state='normal')
+        self.endianswap_entry.config(state='normal')
         self.identifier_entry.config(state='normal')
         self.uuidButton.config(state='normal')
         self.description_entry.config(state='normal')
@@ -375,6 +385,7 @@ class tapeimgrGUI(tk.Frame):
         self.notes_entry.delete(1.0, tk.END)
         self.notes_entry.insert(tk.END, self.tape.notes)
         self.fBlocks.set(self.tape.fillBlocks)
+        self.eSwap.set(self.tape.endianSwap)
         self.start_button.config(state='normal')
         self.quit_button.config(state='normal')
 

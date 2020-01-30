@@ -105,6 +105,7 @@ If needed you can use the folowing options to customize the behaviour of *tapeim
 |**Prefix**|Output prefix (default: `file`).|
 |**Extension**|Output file extension (default: `dd`).|
 |**Fill failed blocks**|Fill blocks that give read errors with null bytes. When this option is checked, *tapeimgr* calls *dd* with the flags `conv=noerror,sync`. The use of these flags is often recommended to ensure a forensic image with no missing/offset bytes in case of read errors (source: [*forensicswiki*](https://www.forensicswiki.org/wiki/Dd)), but when used with a block size that is larger than the actual block size it will generate padding bytes that make the extracted data unreadable. Because of this, any user-specified value of  the **Initial Block Size** setting (see above) is ignored when this option is used. **WARNING: this option may result in malformed output if the actual block size is either smaller than 512 bytes, and/or if the block size is not a multiple of 512 bytes! (I have no idea if this is even possible?).**|
+|**Swap little/big endian**|Use this option to swap the endianness of the file by adding `conv=swab` *dd* option. This is needed most commonly if the tape was created on an older [big endian OS](https://geraldonit.com/2017/09/04/big-and-little-endian-operating-systems/).|
 |**Identifier**|Unique identifier. You can either enter an existing identifier yourself, or press the *UUID* button to generate a [Universally unique identifier](https://en.wikipedia.org/wiki/Universally_unique_identifier).|
 |**Description**|A text string that describes the tape (e.g. the title that is written on its inlay card).|
 |**Notes**|Any additional info or notes you want to record with the tape.|
@@ -113,11 +114,12 @@ If needed you can use the folowing options to customize the behaviour of *tapeim
 
 It is also possible to invoke *tapeimgr* with command-line arguments. The general syntax is:
 
-    tapeimgr [-h] [--version] [--fill] [--device DEVICE]
-                [--blocksize SIZE] [--files FILES] [--prefix PREF]
-                [--extension EXT] [--identifier IDENTIFIER]
-                [--description DESCRIPTION] [--notes NOTES]
-                dirOut
+    tapeimgr [-h] [--version] [--fill] [--endianswap]
+             [--device DEVICE] [--blocksize SIZE] [--files FILES]
+             [--prefix PREF] [--extension EXT]
+             [--identifier IDENTIFIER]
+             [--description DESCRIPTION] [--notes NOTES]
+             dirOut
 
 Here `dirOut` is the output directory. So, the command-line equivalent of the first GUI example is:
 
@@ -141,6 +143,7 @@ As with the GUI interface you can customize the default behaviour by using one o
 |`--prefix PREF, -p PREF`|Output prefix (default: `file`).|
 |`--extension EXT, -e EXT`|Output file extension (default: `dd`).|
 |`--fill, -f`|Fill blocks that give read errors with null bytes. When this option is checked, *tapeimgr* calls *dd* with the flags `conv=noerror,sync`. The use of these flags is often recommended to ensure a forensic image with no missing/offset bytes in case of read errors (source: [*forensicswiki*](https://www.forensicswiki.org/wiki/Dd)), but when used with a block size that is larger than the actual block size it will generate padding bytes that make the extracted data unreadable. Because of this, any user-specified value of the `--blocksize`setting (see above) is ignored when this option is used. **WARNING: this option may result in malformed output if the actual block size is either smaller than 512 bytes, and/or if the block size is not a multiple of 512 bytes! (I have no idea if this is even possible?).**|
+|`--endianswap, -E`|Use this option to swap the endianness of the file by adding `conv=swab` *dd* option. This is needed most commonly if the tape was created on an older [big endian OS](https://geraldonit.com/2017/09/04/big-and-little-endian-operating-systems/).|
 |`--identifier IDENTIFIER, -i IDENTIFIER`|Unique identifier. You can either enter an existing identifier yourself, or enter special value `@uuid` to generate a [Universally unique identifier](https://en.wikipedia.org/wiki/Universally_unique_identifier).|
 |`--description DESCRIPTION, -c DESCRIPTION `|A text string that describes the tape (e.g. the title that is written on its inlay card).|
 |`--notes NOTES, -n NOTES`|Any additional info or notes you want to record with the tape.|

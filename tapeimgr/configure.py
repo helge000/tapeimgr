@@ -58,6 +58,7 @@ def writeConfigFile(configRootDir, removeFlag):
     configSettings['prefix'] = 'file'
     configSettings['extension'] = 'dd'
     configSettings['fillBlocks'] = 'False'
+    configSettings['endianSwap'] = 'False'
     configSettings['timeZone'] = 'Europe/Amsterdam'
     configSettings['defaultDir'] = ''
 
