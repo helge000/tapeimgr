@@ -58,6 +58,11 @@ class tapeimgrCLI:
                                  dest='fillBlocks',
                                  default=self.tape.fillBlocks,
                                  help='fill blocks that give read errors with null bytes')
+        self.parser.add_argument('--endianswap', '-E',
+                                 action='store_true',
+                                 dest='endianSwap',
+                                 default=self.tape.endianSwap,
+                                 help='swap big/little endian')
         self.parser.add_argument('--device', '-d',
                                  action='store',
                                  type=str,
@@ -110,6 +115,7 @@ class tapeimgrCLI:
         args = self.parser.parse_args()
         self.tape.dirOut = args.dirOut
         self.tape.fillBlocks = args.fillBlocks
+        self.tape.endianSwap = args.endianSwap
         self.tape.tapeDevice = args.device
         self.tape.initBlockSize = args.size
         self.tape.files = args.files

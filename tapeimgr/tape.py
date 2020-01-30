@@ -25,6 +25,7 @@ class Tape:
         self.prefix = ''
         self.extension = ''
         self.fillBlocks = ''
+        self.endianSwap = ''
         self.identifier = ''
         self.description = ''
         self.notes = ''
@@ -86,8 +87,10 @@ class Tape:
                 self.prefix = configDict['prefix']
                 self.extension = configDict['extension']
                 self.fillBlocks = configDict['fillBlocks']
-                # Convert fillBlocks to Boolean
+                self.endianSwap = configDict['endianSwap']
+                # Convert fillBlocks/endianSwap to Boolean
                 self.fillBlocks = bool(self.fillBlocks == "True")
+                self.endianSwap = bool(self.endianSwap == "True")
                 self.timeZone = configDict['timeZone']
                 self.defaultDir = configDict['defaultDir']
             except KeyError:
@@ -167,6 +170,7 @@ class Tape:
         logging.info('prefix: ' + self.prefix)
         logging.info('extension: ' + self.extension)
         logging.info('fill blocks: ' + str(self.fillBlocks))
+        logging.info('endian swap: ' + str(self.endianSwap))
 
         ## Acquisition start date/time
         acquisitionStart = shared.generateDateTime(self.timeZone)
@@ -251,6 +255,7 @@ class Tape:
         metadata['prefix'] = self.prefix
         metadata['extension'] = self.extension
         metadata['fillBlocks'] = self.fillBlocks
+        metadata['endianSwap'] = self.endianSwap
         metadata['acquisitionStart'] = acquisitionStart
         metadata['acquisitionEnd'] = acquisitionEnd
         metadata['successFlag'] = self.successFlag
@@ -302,9 +307,17 @@ class Tape:
             args.append('of='+ ofName)
             args.append('bs=' + str(self.blockSize))
 
-            if self.fillBlocks:
-                # Add conv=noerror,sync options to argument list
-                args.append('conv=noerror,sync')
+            if self.fillBlocks or self.endianSwap:
+                conversionOpts = []
+                if self.fillBlocks:
+                    # Add conv=noerror,sync options to argument list
+                    conversionOpts.append('noerror')
+                    conversionOpts.append('sync')
+                if self.endianSwap:
+                    # Add conv=swab for endian conversion
+                    conversionOpts.append('swab')
+
+                args.append('conv=' + ','.join(conversionOpts))
 
             ddStatus, ddOut, ddErr = shared.launchSubProcess(args)
 
