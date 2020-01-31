@@ -195,131 +195,136 @@ class tapeimgrGUI(tk.Frame):
     def build_gui(self):
         """Build the GUI"""
 
+        # Increment row offset after inserting a new UI element
+        rowOffset = 0
+
         self.root.title('tapeimgr v.' + config.version)
         self.root.option_add('*tearOff', 'FALSE')
-        self.grid(column=0, row=0, sticky='w')
+        self.grid(column=0, row=0+rowOffset, sticky='w')
         self.grid_columnconfigure(0, weight=0, pad=0)
         self.grid_columnconfigure(1, weight=0, pad=0)
         self.grid_columnconfigure(2, weight=0, pad=0)
         self.grid_columnconfigure(3, weight=0, pad=0)
 
         # Entry elements
-        ttk.Separator(self, orient='horizontal').grid(column=0, row=0, columnspan=4, sticky='ew')
+        ttk.Separator(self, orient='horizontal').grid(column=0, row=0+rowOffset, columnspan=4, sticky='ew')
         # Output Directory
         self.outDirButton_entry = tk.Button(self,
                                             text='Select Output Directory',
                                             underline=14,
                                             command=self.selectOutputDirectory,
                                             width=20)
-        self.outDirButton_entry.grid(column=0, row=3, sticky='w')
+        self.outDirButton_entry.grid(column=0, row=3+rowOffset, sticky='w')
         self.outDirLabel = tk.Label(self, text=self.tape.dirOut)
         self.outDirLabel.update()
-        self.outDirLabel.grid(column=1, row=3, sticky='w')
+        self.outDirLabel.grid(column=1, row=3+rowOffset, sticky='w')
 
-        ttk.Separator(self, orient='horizontal').grid(column=0, row=5, columnspan=4, sticky='ew')
+        ttk.Separator(self, orient='horizontal').grid(column=0, row=5+rowOffset, columnspan=4, sticky='ew')
 
         # Tape Device
-        tk.Label(self, text='Tape Device').grid(column=0, row=6, sticky='w')
+        tk.Label(self, text='Tape Device').grid(column=0, row=6+rowOffset, sticky='w')
         self.tapeDevice_entry = tk.Entry(self, width=20)
         self.tapeDevice_entry['background'] = 'white'
         self.tapeDevice_entry.insert(tk.END, self.tape.tapeDevice)
-        self.tapeDevice_entry.grid(column=1, row=6, sticky='w')
+        self.tapeDevice_entry.grid(column=1, row=6+rowOffset, sticky='w')
 
         # Initial Block Size
-        tk.Label(self, text='Initial Block Size').grid(column=0, row=7, sticky='w')
+        tk.Label(self, text='Initial Block Size').grid(column=0, row=7+rowOffset, sticky='w')
         self.initBlockSize_entry = tk.Entry(self, width=20)
         self.initBlockSize_entry['background'] = 'white'
         self.initBlockSize_entry.insert(tk.END, self.tape.initBlockSize)
-        self.initBlockSize_entry.grid(column=1, row=7, sticky='w')
+        self.initBlockSize_entry.grid(column=1, row=7+rowOffset, sticky='w')
         self.decreaseBSButton = tk.Button(self, text='-', command=self.decreaseBlocksize, width=1)
-        self.decreaseBSButton.grid(column=1, row=7, sticky='e')
+        self.decreaseBSButton.grid(column=1, row=7+rowOffset, sticky='e')
         self.increaseBSButton = tk.Button(self, text='+', command=self.increaseBlocksize, width=1)
-        self.increaseBSButton.grid(column=2, row=7, sticky='w')
+        self.increaseBSButton.grid(column=2, row=7+rowOffset, sticky='w')
 
         # Files
-        tk.Label(self, text='Files (comma-separated list)').grid(column=0, row=8, sticky='w')
+        tk.Label(self, text='Files (comma-separated list)').grid(column=0, row=8+rowOffset, sticky='w')
         self.files_entry = tk.Entry(self, width=20)
         self.files_entry['background'] = 'white'
         self.files_entry.insert(tk.END, self.tape.files)
-        self.files_entry.grid(column=1, row=8, sticky='w')
+        self.files_entry.grid(column=1, row=8+rowOffset, sticky='w')
 
         # Prefix
-        tk.Label(self, text='Prefix').grid(column=0, row=9, sticky='w')
+        tk.Label(self, text='Prefix').grid(column=0, row=9+rowOffset, sticky='w')
         self.prefix_entry = tk.Entry(self, width=20)
         self.prefix_entry['background'] = 'white'
         self.prefix_entry.insert(tk.END, self.tape.prefix)
-        self.prefix_entry.grid(column=1, row=9, sticky='w')
+        self.prefix_entry.grid(column=1, row=9+rowOffset, sticky='w')
 
         # Extension
-        tk.Label(self, text='Extension').grid(column=0, row=10, sticky='w')
+        tk.Label(self, text='Extension').grid(column=0, row=10+rowOffset, sticky='w')
         self.extension_entry = tk.Entry(self, width=20)
         self.extension_entry['background'] = 'white'
         self.extension_entry.insert(tk.END, self.tape.extension)
-        self.extension_entry.grid(column=1, row=10, sticky='w')
+        self.extension_entry.grid(column=1, row=10+rowOffset, sticky='w')
 
         # Fill failed blocks
-        tk.Label(self, text='Fill failed blocks').grid(column=0, row=11, sticky='w')
+        tk.Label(self, text='Fill failed blocks').grid(column=0, row=11+rowOffset, sticky='w')
         self.fBlocks = tk.BooleanVar()
         self.fBlocks.set(self.tape.fillBlocks)
         self.fillblocks_entry = tk.Checkbutton(self, variable=self.fBlocks)
-        self.fillblocks_entry.grid(column=1, row=11, sticky='w')
+        self.fillblocks_entry.grid(column=1, row=11+rowOffset, sticky='w')
 
         # Swap Endian
-        tk.Label(self, text='Swap little/big endian').grid(column=0, row=12, sticky='w')
+        tk.Label(self, text='Swap little/big endian').grid(column=0, row=12+rowOffset, sticky='w')
         self.eSwap = tk.BooleanVar()
         self.eSwap.set(self.tape.endianSwap)
         self.endianswap_entry = tk.Checkbutton(self, variable=self.eSwap)
-        self.endianswap_entry.grid(column=1, row=12, sticky='w')
+        self.endianswap_entry.grid(column=1, row=12+rowOffset, sticky='w')
 
-        ttk.Separator(self, orient='horizontal').grid(column=0, row=12+1, columnspan=4, sticky='ew')
+        rowOffset =+ 1
+
+        ttk.Separator(self, orient='horizontal').grid(column=0, row=12+rowOffset, columnspan=4, sticky='ew')
 
         # Identifier entry field
-        tk.Label(self, text='Identifier').grid(column=0, row=13, sticky='w')
+        tk.Label(self, text='Identifier').grid(column=0, row=13+rowOffset, sticky='w')
         self.identifier_entry = tk.Entry(self, width=20)
         self.identifier_entry['background'] = 'white'
         self.identifier_entry.insert(tk.END, self.tape.identifier)
-        self.identifier_entry.grid(column=1, row=13, sticky='w')
+        self.identifier_entry.grid(column=1, row=13+rowOffset, sticky='w')
         self.uuidButton = tk.Button(self, text='UUID', underline=0,
                                     command=self.insertUUID, width=2)
-        self.uuidButton.grid(column=1, row=13+1, sticky='e')
+        self.uuidButton.grid(column=1, row=13+rowOffset, sticky='e')
 
         # Description entry field
-        tk.Label(self, text='Description').grid(column=0, row=14, sticky='w')
+        tk.Label(self, text='Description').grid(column=0, row=14+rowOffset, sticky='w')
         self.description_entry = tk.Entry(self, width=35)
         self.description_entry['background'] = 'white'
         self.description_entry.insert(tk.END, self.tape.description)
-        self.description_entry.grid(column=1, row=14+1, sticky='w', columnspan=1)
+        self.description_entry.grid(column=1, row=14+rowOffset, sticky='w', columnspan=1)
 
         # Notes entry field
-        tk.Label(self, text='Notes').grid(column=0, row=15, sticky='w')
+        tk.Label(self, text='Notes').grid(column=0, row=15+rowOffset, sticky='w')
         self.notes_entry = tk.Text(self, height=6, width=35)
         self.notes_entry['background'] = 'white'
         self.notes_entry.insert(tk.END, self.tape.notes)
-        self.notes_entry.grid(column=1, row=15+1, sticky='w', columnspan=1)
+        self.notes_entry.grid(column=1, row=15+rowOffset, sticky='w', columnspan=1)
 
-        ttk.Separator(self, orient='horizontal').grid(column=0, row=16+1, columnspan=4, sticky='ew')
+        ttk.Separator(self, orient='horizontal').grid(column=0, row=16+rowOffset, columnspan=4, sticky='ew')
 
         self.start_button = tk.Button(self,
                                       text='Start',
                                       width=10,
                                       underline=0,
                                       command=self.on_submit)
-        self.start_button.grid(column=1, row=17+1, sticky='w')
+        self.start_button.grid(column=1, row=17+rowOffset, sticky='w')
 
         self.quit_button = tk.Button(self,
                                      text='Exit',
                                      width=10,
                                      underline=0,
                                      command=self.on_quit)
-        self.quit_button.grid(column=1, row=17+1, sticky='e')
+        self.quit_button.grid(column=1, row=17+rowOffset, sticky='e')
 
-        ttk.Separator(self, orient='horizontal').grid(column=0, row=18+1, columnspan=4, sticky='ew')
+        ttk.Separator(self, orient='horizontal').grid(column=0, row=18+rowOffset, columnspan=4, sticky='ew')
 
         # Add ScrolledText widget to display logging info
         self.st = ScrolledText.ScrolledText(self, state='disabled', height=15)
         self.st.configure(font='TkFixedFont')
         self.st['background'] = 'white'
-        self.st.grid(column=0, row=19+1, sticky='ew', columnspan=4)
+        self.st.grid(column=0, row=19+rowOffset, sticky='ew', columnspan=4)
 
         # Define bindings for keyboard shortcuts: buttons
         self.root.bind_all('<Control-Key-d>', self.selectOutputDirectory)
